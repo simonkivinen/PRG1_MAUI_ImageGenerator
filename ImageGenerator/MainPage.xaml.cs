@@ -66,12 +66,13 @@ namespace ImageGenerator
             }
             else
             {
+                _favoriteList.Add(_currentImageKey);
                 FavoriteButton.Source = new FontImageSource
                 {
-                    Glyph = "\ue87e",
+                    Glyph = "\ue87d",
                     FontFamily = "MaterialIcons",
                     Size = 32,
-                    Color = Colors.Gray
+                    Color = Colors.Red
                 };
             }
         }
