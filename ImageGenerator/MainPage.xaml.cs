@@ -4,16 +4,21 @@ namespace ImageGenerator
 {
     public partial class MainPage : ContentPage
     {
-        static private bool _isFavorite;
+        private class ImageItem
+        {
+            public string FileName { get; set; }
+            public string Title { get; set; }
+            public bool IsFavorite { get; set; }
+        }
 
-        private Dictionary<string, string> ImageList = new()
-            {
-                {"image1", "Man" },
-                {"image2", "Bird" },
-                {"image3", "Big cat" },
-                {"image4", "Autumn road" },
-                {"image5", "Flowergirl" }
-            };
+        private readonly List<ImageItem> _images = new()
+        {
+            new ImageItem { FileName = "image1", Title = "Man" },
+            new ImageItem { FileName = "image2", Title = "Bird" },
+            new ImageItem { FileName = "image3", Title = "Big Cat" },
+            new ImageItem { FileName = "image4", Title = "Autumn road" },
+            new ImageItem { FileName = "image5", Title = "Flowergirl" },
+        };
 
 
         private Random random = new();
