@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace ImageGenerator
 {
@@ -8,7 +10,6 @@ namespace ImageGenerator
         {
             public string FileName { get; set; }
             public string Title { get; set; }
-            public bool IsFavorite { get; set; }
         }
 
         private readonly List<ImageItem> _images = new()
@@ -19,6 +20,9 @@ namespace ImageGenerator
             new ImageItem { FileName = "image4", Title = "Autumn road" },
             new ImageItem { FileName = "image5", Title = "Flowergirl" },
         };
+
+        private readonly List<string> _favoriteList = new();
+        private string _currentImageKey;
 
 
         private Random random = new();
@@ -35,38 +39,42 @@ namespace ImageGenerator
 
         private void ShowImageAndText()
         {
-            var pairs = ImageList.ElementAt(random.Next(ImageList.Count));
+            var item = _images[random.Next(_images.Count)];
+            _currentImageKey = item.FileName;
 
-            Debug.WriteLine(pairs.Key + ": " + pairs.Value); // för testning i Output
+            string showkey = GetImageFileEnding(item.FileName);
 
-            string showKey = GetImageFileEnding(pairs.Key); // detta då Windows, men inte till exempel Android, kräver filändelse
+            ShowGallery.Source = showkey;
+            ImageText.Text = item.Title;
 
-            ShowGallery.Source = showKey;
-
-            ImageText.Text = pairs.Value;
+            UpdatefavoriteIcon();
         }
 
         private string GetImageFileEnding(string imageKey)
         {
-            #if WINDOWS
+#if WINDOWS
             return imageKey + ".jpg";
-            #else
+#else
             return imageKey;
-            #endif
+#endif
         }
 
         private void OnFavoriteClicked(object sender, EventArgs e)
         {
-            _isFavorite = !_isFavorite;
+            if (string.IsNullOrEmpty(_currentImageKey))
+                return;
 
-            if (_isFavorite)
+            bool isFavorite = _favoriteList.Contains(_currentImageKey);
+
+            if (isFavorite)
             {
+                _favoriteList.Remove(_currentImageKey);
                 FavoriteButton.Source = new FontImageSource
                 {
-                    Glyph = "\ue87d",
+                    Glyph = "\ue87e",
                     FontFamily = "MaterialIcons",
                     Size = 32,
-                    Color = Colors.Red
+                    Color = Colors.Grey
                 };
             }
             else
@@ -78,6 +86,35 @@ namespace ImageGenerator
                     Size = 32,
                     Color = Colors.Gray
                 };
+            }
+
+        }
+
+        private void UpdatefavoriteIcon()
+        {
+            if (string.IsNullOrEmpty(_currentImageKey))
+                return;
+            bool isFavorite = _favoriteList.Contains(_currentImageKey);
+            if (isFavorite)
+            {
+                FavoriteButton.Source = new FontImageSource
+                {
+                    Glyph = isFavorite ? "\ue87d" : "\ue87e",
+                    FontFamily = "MaterialIcons",
+                    Size = 32,
+                    Color = isFavorite ? Colors.Red : Colors.Gray
+                };
+            }
+            else
+            {
+                FavoriteButton.Source = new FontImageSource
+                {
+                    Glyph = "\ue87e",
+                    FontFamily = "MaterialIcons",
+                    Size = 32,
+                    Color = Colors.Gray
+                };
+
             }
         }
     }
