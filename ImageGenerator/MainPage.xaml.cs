@@ -36,7 +36,10 @@ namespace ImageGenerator
         public MainPage()
         {
             InitializeComponent();
+            LastFavoriteButton.IsEnabled = false;
+
         }
+        
 
         private void ImageOnClicked(object? sender, EventArgs e)
         {
@@ -97,6 +100,7 @@ namespace ImageGenerator
                 };
                 Debug.WriteLine($"Senast Favorit: {_recentFavorites.Peek()}");
             }
+            LastFavoriteButton.IsEnabled = _favoriteList.Count > 0;
         }
         private void UpdatefavoriteIcon()
         {
@@ -132,6 +136,7 @@ namespace ImageGenerator
             {
                 string lastFav = _recentFavorites.Peek();
                 Debug.WriteLine($"Senast favorit: {lastFav}");
+                _currentImageKey = lastFav;
                 ShowGallery.Source = GetImageFileEnding(lastFav);
                 ImageText.Text = _images.First(x => x.FileName == lastFav).Title;
                 UpdatefavoriteIcon();

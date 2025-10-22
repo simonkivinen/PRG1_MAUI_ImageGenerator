@@ -50,6 +50,7 @@
                     HorizontalOptions="Fill"
                     Grid.Column="0"/>
                 <Button 
+                    x:Name="LastFavoriteButton"
                     Text="Visa senaste favorit" 
                     Clicked="ShowLastFavorite"
                     HorizontalOptions="Fill"
